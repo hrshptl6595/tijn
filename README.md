@@ -25,5 +25,4 @@ The *full path* to the
 [MySQL JDBC driver](https://dev.mysql.com/downloads/connector/j/) (found in this
 directory) must be in your classpath.
 ```
-java -cp /home/ryan/cs631/tijn/mysql-connector-java-8.0.13.jar tijn tijn_db tijn_user tijn_pass
-```
+java -cp /home/ryan/cs631/tijn/mysql-connector-java-8.0.13.jar tijn
