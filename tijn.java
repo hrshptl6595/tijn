@@ -1,5 +1,6 @@
 import java.util.Scanner;
 import java.sql.*;
+import java.text.NumberFormat;
 
 class tijn
 {
@@ -23,13 +24,40 @@ class tijn
                         rset.getInt("SSN"), rset.getString("Name"));
                 }
                 input = scanner.nextLine();
-                if (! rset.absolute(Integer.parseInt(input)))
-                {
+                try {
+                    if (rset.absolute(Integer.parseInt(input)))
+                        return rset.getInt("SSN");
+                    throw new NumberFormatException();
+                } catch (NumberFormatException e) {
                     System.out.println("Invalid selection");
                     rset.beforeFirst();
                 }
-                else
-                    return rset.getInt("SSN");
+        }
+    }
+
+    // Text interface for the account menu
+    static void account_menu() throws SQLException
+    {
+        String input;
+        ResultSet rset = stmt.executeQuery("SELECT * FROM user_account");
+
+        rset.first();
+        while (true)
+        {
+            System.out.println("=== Account Menu ===");
+            System.out.printf("SSN: %09d\n", rset.getInt("SSN"));
+            System.out.printf("Name: %s\n", rset.getString("Name"));
+            System.out.printf("Balance: %s\n",
+                NumberFormat.getCurrencyInstance().format(rset.getBigDecimal("Balance")));
+            System.out.println("Bank Accounts:");
+            System.out.println("Email Addresses:");
+            System.out.println("Phone Numbers:");
+            System.out.println("What would you like to modify?");
+            System.out.println("[B]ank accounts");
+            System.out.println("[E]mail addresses");
+            System.out.println("[P]hone numbers");
+            input = scanner.nextLine();
+            return;
         }
     }
 
@@ -40,7 +68,7 @@ class tijn
         
         while (true)
         {
-            System.out.println("=== Main Menu ==");
+            System.out.println("=== Main Menu ===");
             System.out.println("[A]ccount");
             System.out.println("[S]end Money");
             System.out.println("[R]equest Money");
@@ -50,7 +78,7 @@ class tijn
             input = scanner.nextLine();
             switch(input.toUpperCase()) {
                 case "A":
-                    System.out.println("Not yet implemented");
+                    account_menu();
                     break;
                 case "S":
                     System.out.println("Not yet implemented");

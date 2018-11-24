@@ -1,5 +1,8 @@
 # TIJN Payment Network
 
+* [Deliverable 3 Description](docs/deliverable_3.pdf)
+* [Relational Schema](docs/schema.pdf)
+
 ## Requirements
 
 * [MySQL](https://mysql.com) must be installed and running on the default port
