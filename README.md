@@ -1,6 +1,6 @@
 # TIJN Payment Network
 
-* [Deliverable 3 Description](docs/deliverable_3.pdf)
+* [Description](docs/description.pdf)
 * [Relational Schema](docs/schema.pdf)
 
 ## Requirements

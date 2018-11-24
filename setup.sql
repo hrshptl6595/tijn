@@ -38,6 +38,16 @@ CREATE TABLE has_additional (
     FOREIGN KEY (BankID, BANumber) REFERENCES bank_account(BankID, BANumber)
 );
 
+/* electronic_address */
+CREATE TABLE electronic_address (
+    Identifier varchar(255) NOT NULL,
+    SSN int NOT NULL,
+    Type varchar(255) NOT NULL,
+    Verified boolean NOT NULL,
+    PRIMARY KEY (Identifier),
+    FOREIGN KEY (SSN) REFERENCES user_account(SSN)
+); 
+
 /*** Setup our test data ***/
 
 /* bank_account */
@@ -64,3 +74,14 @@ INSERT INTO user_account VALUES
 INSERT INTO has_additional VALUES
 (000000001, 122105155, 2000000001, False),
 (000000005, 122235821, 1000000005, True);
+
+/* electronic_address */
+INSERT INTO electronic_address VALUES
+("efc@ibm.com", 000000001, "email", True),
+("teddy@gmail.com", 000000001, "email", False),
+("1-877-426-6006", 000000001, "phone", True),
+("1-609-588-0326", 000000001, "phone", False),
+("cjd@ibm.com", 000000002, "email", True),
+("sql4lyfe@aol.com", 000000002, "email", False),
+("1-514-220-8686", 000000002, "phone", True),
+("1-215-664-4040", 000000003, "phone", True);

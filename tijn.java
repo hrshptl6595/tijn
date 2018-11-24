@@ -6,23 +6,24 @@ class tijn
 {
     static Scanner scanner = new Scanner(System.in);
     static Connection conn;
-    static Statement stmt;
     static int ssn;
 
     // Text interface for the sign in menu
     static int sign_in_menu() throws SQLException
     {
         String input;
+        Statement stmt = conn.createStatement();
         ResultSet rset = stmt.executeQuery("SELECT SSN, Name FROM user_account");
 
         while (true)
         {
-                System.out.println("=== Please select a user by row number ===");
+                System.out.println("=== Please select a user by number ===");
                 while (rset.next())
                 {
                     System.out.printf("[%d] %09d %s\n", rset.getRow(),
                         rset.getInt("SSN"), rset.getString("Name"));
                 }
+                System.out.print("> ");
                 input = scanner.nextLine();
                 try {
                     if (rset.absolute(Integer.parseInt(input)))
@@ -38,26 +39,81 @@ class tijn
     // Text interface for the account menu
     static void account_menu() throws SQLException
     {
-        String input;
-        ResultSet rset = stmt.executeQuery("SELECT * FROM user_account");
+        String type, add_or_remove, number;
+        // it takes 4 statements to get the user info we display
+        Statement stmt1 = conn.createStatement();
+        Statement stmt2 = conn.createStatement();
+        Statement stmt3 = conn.createStatement();
+        Statement stmt4 = conn.createStatement();
+        // store the result sets in different variables
+        ResultSet general, accounts, emails, phones;
 
-        rset.first();
         while (true)
         {
-            System.out.println("=== Account Menu ===");
-            System.out.printf("SSN: %09d\n", rset.getInt("SSN"));
-            System.out.printf("Name: %s\n", rset.getString("Name"));
-            System.out.printf("Balance: %s\n",
-                NumberFormat.getCurrencyInstance().format(rset.getBigDecimal("Balance")));
+            // execute our queries
+            general = stmt1.executeQuery("SELECT * FROM user_account WHERE SSN=" +
+                ssn);
+            general.first();
+            accounts = stmt2.executeQuery("SELECT * FROM has_additional WHERE SSN=" +
+                ssn);
+            emails = stmt3.executeQuery(
+                "SELECT * FROM electronic_address WHERE SSN=" + ssn +
+                " AND TYPE='email'");
+            phones = stmt4.executeQuery(
+                "SELECT * FROM electronic_address WHERE SSN=" + ssn +
+                " AND TYPE='phone'");
+
+            // print the account information            
+            System.out.println("=== Account Info ===");
+            System.out.printf("SSN: %09d Name: %s Balance: %s",
+                general.getInt("SSN"), general.getString("Name"),
+                NumberFormat.getCurrencyInstance().format(general.getBigDecimal("Balance")));
             System.out.println("Bank Accounts:");
+            System.out.printf(
+                "[1] BankID: %09d BANumber: %10d Verified: %s (Primary Account)\n",
+                general.getInt("BankID"), general.getInt("BANumber"),
+                general.getBoolean("PBAVerified") ? "true" : "false");
+            while (accounts.next())
+            {
+                System.out.printf(
+                    "[%d] BankID: %09d BANumber: %10d Verified: %s\n",
+                    accounts.getRow() + 1, accounts.getInt("BankID"),
+                    accounts.getInt("BANumber"), accounts.getBoolean("Verified"));
+            }
             System.out.println("Email Addresses:");
+            while (emails.next())
+            {
+                System.out.printf(
+                    "[%d] %s Verified: %s\n", emails.getRow(),
+                    emails.getString("Identifier"),
+                    emails.getBoolean("Verified") ? "true": "false");
+            }
             System.out.println("Phone Numbers:");
-            System.out.println("What would you like to modify?");
+            while (phones.next())
+            {
+                System.out.printf(
+                    "[%d] %s Verified: %s\n", phones.getRow(),
+                    phones.getString("Identifier"),
+                    phones.getBoolean("Verified") ? "true": "false");
+            }
+
+            // print the account menu and get particulars
+            System.out.println("\n=== Account Menu ===");
             System.out.println("[B]ank accounts");
             System.out.println("[E]mail addresses");
             System.out.println("[P]hone numbers");
-            input = scanner.nextLine();
-            return;
+            System.out.println("What would you like to modify?");
+            System.out.print("> ");
+            type = scanner.nextLine();
+            System.out.println("[A]dd or [R]emove?");
+            System.out.print("> ");
+            add_or_remove = scanner.nextLine();
+            if (add_or_remove.toUpperCase().equals("R"))
+            {
+                System.out.println("Which number? See info above.");
+                System.out.print("> ");
+                number = scanner.nextLine();
+            }
         }
     }
 
@@ -75,8 +131,10 @@ class tijn
             System.out.println("S[t]atements");
             System.out.println("S[e]arch Transactions");
             System.out.println("S[i]gn Out");
+            System.out.print("> ");
             input = scanner.nextLine();
-            switch(input.toUpperCase()) {
+            switch(input.toUpperCase())
+            {
                 case "A":
                     account_menu();
                     break;
@@ -105,7 +163,6 @@ class tijn
         try {
             conn = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/tijn", "tijn", "tijn");
-            stmt = conn.createStatement();
             while (true)
             {
                 ssn = sign_in_menu();
