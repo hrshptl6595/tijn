@@ -28,8 +28,8 @@ class tijn
                 try {
                     if (rset.absolute(Integer.parseInt(input)))
                         return rset.getInt("SSN");
-                    throw new NumberFormatException();
-                } catch (NumberFormatException e) {
+                    throw new RuntimeException("Invalid user number");
+                } catch (RuntimeException r) {
                     System.out.println("Invalid selection");
                     rset.beforeFirst();
                 }
@@ -39,12 +39,13 @@ class tijn
     // Text interface for the account menu
     static void account_menu() throws SQLException
     {
-        String type, add_or_remove, number;
+        String type, add_or_remove, number = "";
         // it takes 4 statements to get the user info we display
         Statement stmt1 = conn.createStatement();
         Statement stmt2 = conn.createStatement();
         Statement stmt3 = conn.createStatement();
         Statement stmt4 = conn.createStatement();
+        Statement update = conn.createStatement();
         // store the result sets in different variables
         ResultSet general, accounts, emails, phones;
 
@@ -65,18 +66,18 @@ class tijn
 
             // print the account information            
             System.out.println("=== Account Info ===");
-            System.out.printf("SSN: %09d Name: %s Balance: %s",
+            System.out.printf("SSN: %09d Name: %s Balance: %s\n",
                 general.getInt("SSN"), general.getString("Name"),
                 NumberFormat.getCurrencyInstance().format(general.getBigDecimal("Balance")));
             System.out.println("Bank Accounts:");
             System.out.printf(
-                "[1] BankID: %09d BANumber: %10d Verified: %s (Primary Account)\n",
+                "[1] BankID: %09d BANumber: %010d Verified: %s (Primary Account)\n",
                 general.getInt("BankID"), general.getInt("BANumber"),
                 general.getBoolean("PBAVerified") ? "true" : "false");
             while (accounts.next())
             {
                 System.out.printf(
-                    "[%d] BankID: %09d BANumber: %10d Verified: %s\n",
+                    "[%d] BankID: %09d BANumber: %010d Verified: %s\n",
                     accounts.getRow() + 1, accounts.getInt("BankID"),
                     accounts.getInt("BANumber"), accounts.getBoolean("Verified"));
             }
@@ -102,6 +103,7 @@ class tijn
             System.out.println("[B]ank accounts");
             System.out.println("[E]mail addresses");
             System.out.println("[P]hone numbers");
+            System.out.println("[C]ancel");
             System.out.println("What would you like to modify?");
             System.out.print("> ");
             type = scanner.nextLine();
@@ -113,6 +115,64 @@ class tijn
                 System.out.println("Which number? See info above.");
                 System.out.print("> ");
                 number = scanner.nextLine();
+            }
+
+            try {
+                switch(type.toUpperCase()) {
+                    case "C":
+                        return;
+                    case "B": // bank accounts
+                        switch(add_or_remove.toUpperCase()) {
+                            case "A": // add
+                                String BankID, BANumber;
+                                ResultSet rset;
+
+                                // gather the input we need
+                                System.out.print("Enter BankID:\n> ");
+                                BankID = scanner.nextLine();
+                                System.out.print("Enter BANumber:\n> ");
+                                BANumber = scanner.nextLine();
+
+                                // check to see if the account is already in
+                                // bank_accont and add it if not
+                                rset = update.executeQuery(
+                                    "SELECT * FROM bank_account WHERE BankID=" +
+                                    BankID + " AND BANumber=" + BANumber);
+                                if (! rset.next())
+                                    update.executeUpdate(
+                                        "INSERT INTO bank_account VALUES " +
+                                        "(" + BankID + ", " + BANumber + ")");
+
+                                // add the account to has_additional
+                                update.executeUpdate(
+                                    "INSERT INTO has_additional VALUES " +
+                                    "(" + ssn + ", " + BankID + ", " + BANumber
+                                    + ", False)");
+
+                                break;
+                            case "R": // remove
+                                if (accounts.absolute(Integer.parseInt(number) - 1))
+                                    update.executeUpdate(
+                                        "DELETE FROM has_additional WHERE SSN="
+                                        + ssn + " AND BankID=" +
+                                        accounts.getInt("BankID") +
+                                        " AND BANumber=" +
+                                        accounts.getInt("BANumber"));
+                                else
+                                    throw new RuntimeException(
+                                        "Invalid account selection");
+                                break;
+                            default:
+                                throw new RuntimeException(
+                                    "Invalid add or remove selection");
+                        }
+                        break;
+                    default:
+                        throw new RuntimeException(
+                            "Invalid account menu selection");
+                }
+            } catch (RuntimeException r) {
+                System.out.println("Invalid selection");
             }
         }
     }
