@@ -38,3 +38,10 @@ This payment network interface presents a text, menu-driven interface. A "> "
 prompt indicates that the program is awaiting your input. Most options are
 a single character shown in brackets. Case does not matter and Ctrl-C can be
 used to quit at any time.
+
+## Design Considerations
+
+* When a user changes their primary account information, if the information
+is already in an additional account for the user the account's verification
+status will be preserved and the duplicate account will be removed from
+additional accounts. 
