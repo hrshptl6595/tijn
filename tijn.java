@@ -2,25 +2,22 @@ import java.util.Scanner;
 import java.sql.*;
 import java.text.NumberFormat;
 
-class tijn
-{
+class tijn {
     static Scanner scanner = new Scanner(System.in);
     static Connection conn;
     static int ssn;
     static Account account;
+    static Transaction transaction;
 
     // Text interface for the sign in menu
-    static int sign_in_menu() throws SQLException
-    {
+    static int sign_in_menu() throws SQLException {
         String input;
         Statement stmt = conn.createStatement();
         ResultSet rset = stmt.executeQuery("SELECT SSN, Name FROM user_account");
 
-        while (true)
-        {
+        while (true) {
                 System.out.println("\n=== Please select a user by number ===");
-                while (rset.next())
-                {
+                while (rset.next()) {
                     System.out.printf("[%d] %09d %s\n", rset.getRow(),
                         rset.getInt("SSN"), rset.getString("Name"));
                 }
@@ -38,12 +35,10 @@ class tijn
     }
 
     // Text interface for the main menu
-    static void main_menu() throws SQLException
-    {
+    static void main_menu() throws SQLException {
         String input;
         
-        while (true)
-        {
+        while (true) {
             System.out.println("\n=== Main Menu ===");
             System.out.println("[A]ccount");
             System.out.println("[S]end Money");
@@ -53,13 +48,12 @@ class tijn
             System.out.println("S[i]gn Out");
             System.out.print("> ");
             input = scanner.nextLine();
-            switch(input.toUpperCase())
-            {
+            switch(input.toUpperCase()) {
                 case "A":
                     account.menu();
                     break;
                 case "S":
-                    System.out.println("Not yet implemented");
+                    transaction.send_menu();
                     break;
                 case "R":
                     System.out.println("Not yet implemented");
@@ -78,15 +72,14 @@ class tijn
         }
     }
 
-    public static void main(String arg[])
-    {
+    public static void main(String arg[]) {
         try {
             conn = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/tijn", "tijn", "tijn");
-            while (true)
-            {
+            while (true) {
                 ssn = sign_in_menu();
                 account = new Account(scanner, conn, ssn);
+                transaction = new Transaction(scanner, conn, ssn);
                 main_menu();
             }
         } catch (SQLException ex) {

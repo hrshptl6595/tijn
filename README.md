@@ -44,4 +44,9 @@ used to quit at any time.
 * When a user changes their primary account information, if the information
 is already in an additional account for the user the account's verification
 status will be preserved and the duplicate account will be removed from
-additional accounts. 
+additional accounts.
+* A *Claimed* timestamp was added to *send_transaction* to keep track of which
+payments have been processed.
+* As soon as a user sends money it is removed from their balance, even if it
+has not been claimed yet. This is to prevent users from ending up in the red.
+* Users are warned when sending money to an unknown identifier.

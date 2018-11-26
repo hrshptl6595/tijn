@@ -19,7 +19,7 @@ CREATE TABLE bank_account (
 CREATE TABLE user_account (
     SSN int NOT NULL,
     Name varchar(255) NOT NULL,
-    Balance decimal(36,2) NOT NULL, 
+    Balance decimal(36, 2) NOT NULL, 
     BankID int NOT NULL,
     BANumber int NOT NULL,
     PBAVerified boolean NOT NULL,
@@ -46,8 +46,22 @@ CREATE TABLE electronic_address (
     Verified boolean NOT NULL,
     PRIMARY KEY (Identifier),
     FOREIGN KEY (SSN) REFERENCES user_account(SSN)
-); 
+);
 
+/* send_transaction */
+CREATE TABLE send_transaction (
+    STId INT NOT NULL AUTO_INCREMENT,
+    Amount DECIMAL(36, 2) NOT NULL,
+    ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Memo VARCHAR(255),
+    Cancelled BOOLEAN NOT NULL,
+    Claimed TIMESTAMP,
+    SSN int NOT NULL,
+    Identifier varchar(255) NOT NULL,
+    PRIMARY KEY (STId),
+    FOREIGN KEY (SSN) REFERENCES user_account(SSN)
+);
+ 
 /*** Setup our test data ***/
 
 /* bank_account */
