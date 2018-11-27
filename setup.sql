@@ -3,8 +3,9 @@ DROP DATABASE IF EXISTS tijn;
 CREATE DATABASE tijn;
 USE tijn;
 
-/*** Setup our user ***/
-GRANT ALL ON tijn.* to 'tijn'@'localhost' IDENTIFIED BY 'tijn';
+/*** Setup our user (this requires mysql >= 5.7.6) */
+CREATE USER IF NOT EXISTS 'tijn'@'localhost' IDENTIFIED BY 'tijn';
+GRANT ALL ON tijn.* to 'tijn'@'localhost';
 
 /*** Setup out tables ***/
 
