@@ -8,28 +8,42 @@
 * [MySQL](https://mysql.com) must be installed and running on the default port
 * A [Java Development Kit](https;//openjdk.java.net) must be installed to compile
 
+## Getting the source
+
+```bash
+$ git clone https://github.com/rxt1077/tijn.git
+$ cd tijn
+```
+
 ## Setting up the DB
 
 The SQL commands to setup our database, user, and tables can be found in
 setup.sql. Run them via the mysql client to get things setup:
 
-```
-mysql --user=root < setup.sql
+```bash
+$ mysql --user=root < setup.sql
 ```
 
 ## Compiling
 
-```
-javac *.java
+```bash
+$ javac *.java
 ```
 
 ## Running
 
 The *full path* to the
 [MySQL JDBC driver](https://dev.mysql.com/downloads/connector/j/) (found in this
-directory) must be in your classpath.
-```
-java -cp /home/ryan/cs631/tijn/mysql-connector-java-8.0.13.jar tijn
+directory) must be in your classpath. Substitute *your* path in the following commands.
+
+```bash
+Linux:
+
+$ java -cp .:/home/ryan/cs631/tijn/mysql-connector-java-8.0.13.jar tijn
+
+Windows:
+
+$ java -cp '.;C:\Users\rtolboom\tijn\mysql-connector-java-8.0.13.jar' tijn
 ```
 
 ## Usage
