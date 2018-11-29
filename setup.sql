@@ -102,3 +102,10 @@ INSERT INTO electronic_address VALUES
 ("sql4lyfe@aol.com", 000000002, "email", False),
 ("1-514-220-8686", 000000002, "phone", True),
 ("1-215-664-4040", 000000003, "phone", True);
+
+/* send_transaction */
+INSERT INTO send_transaction (Amount, ts, Memo, Cancelled, Claimed, SSN, Identifier) VALUES
+(5.00, '2018-11-29 00:00:00', 'For coffee', False, NULL, 000000001, 'cjd@ibm.com'),
+(5.25, '2018-11-23 00:00:00', 'Donuts', False, NULL, 000000001, '1-514-220-8686'),
+(5.25, '2018-10-04 00:00:00', 'Soda', False, NULL, 000000001, 'sql4lyfe@aol.com'),
+(4.25, '2018-10-02 00:00:00', 'Splitting check', False, NULL, 000000001, 'greg@commerze.com');

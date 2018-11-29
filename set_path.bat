@@ -1,0 +1,1 @@
+set PATH=%PATH%;C:\Program Files\Java\jdk1.8.0_191\bin;C:\Program Files\MariaDB 10.3\bin

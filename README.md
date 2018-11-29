@@ -5,7 +5,7 @@
 
 ## Requirements
 
-* [MySQL](https://mysql.com) must be installed and running on the default port
+* [MySQL >= 5.7.6](https://mysql.com) or [MariaDB](https://go.mariadb.com) must be installed and running on the default port
 * A [Java Development Kit](https;//openjdk.java.net) must be installed to compile
 
 ## Getting the source
@@ -33,8 +33,10 @@ $ javac *.java
 ## Running
 
 The *full path* to the
-[MySQL JDBC driver](https://dev.mysql.com/downloads/connector/j/) (found in this
-directory) must be in your classpath. Substitute *your* path in the following commands.
+[MySQL](https://dev.mysql.com/downloads/connector/j/) or
+[MariaDB](https://downloads.mariadb.com/#connectors) JDBC Driver (both found in
+this directory) must be in your classpath. Substitute *your* path in the
+following commands.
 
 ```bash
 Linux:
@@ -64,3 +66,5 @@ payments have been processed.
 * As soon as a user sends money it is removed from their balance, even if it
 has not been claimed yet. This is to prevent users from ending up in the red.
 * Users are warned when sending money to an unknown identifier.
+* The percentage column is used to indicate what percentage of a total amount
+the payment is sending.

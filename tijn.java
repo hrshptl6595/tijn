@@ -8,6 +8,7 @@ class tijn {
     static int ssn;
     static Account account;
     static Transaction transaction;
+    static TIJN_Statement statement;
 
     // Text interface for the sign in menu
     static int sign_in_menu() throws SQLException {
@@ -59,7 +60,7 @@ class tijn {
                     System.out.println("Not yet implemented");
                     break;
                 case "T":
-                    System.out.println("Not yet implemented");
+                    statement.menu();
                     break;
                 case "E":
                     System.out.println("Not yet implemented");
@@ -80,6 +81,7 @@ class tijn {
                 ssn = sign_in_menu();
                 account = new Account(scanner, conn, ssn);
                 transaction = new Transaction(scanner, conn, ssn);
+                statement = new TIJN_Statement(scanner, conn, ssn);
                 main_menu();
             }
         } catch (SQLException ex) {
