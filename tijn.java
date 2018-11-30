@@ -57,7 +57,7 @@ class tijn {
                     transaction.send_menu();
                     break;
                 case "R":
-                    System.out.println("Not yet implemented");
+                    transaction.request_menu();
                     break;
                 case "T":
                     statement.menu();

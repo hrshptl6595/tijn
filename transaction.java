@@ -73,4 +73,35 @@ class Transaction {
             System.out.println("Invalid input");
         } 
     }
-}
+
+    void request_menu() throws SQLException{
+        try{
+            Statement stmt = conn.createStatement();
+            String id, memo;
+            ResultSet rset;
+            BigDecimal amount;
+            BigDecimal percentage;
+            System.out.print("Enter email address or phone:\n>");
+            id = scan.nextLine();
+            // warn if we can't lookup the identifier
+            rset = stmt.executeQuery(String.format(
+                "SELECT * FROM electronic_address WHERE Identifier='%s'",
+                id));
+            if (! rset.next()) {
+                System.out.println(
+                    "Unable to look up this email address or phone number. Please try again");
+            }
+            System.out.print("Enter amount:\n>");
+            amount = new BigDecimal(scan.nextLine());
+            System.out.print("Enter percentage to request from the provided user in decimal form:\n>");
+            percentage = new BigDecimal(scan.nextLine());
+
+        }
+        catch (RuntimeException r){
+            System.out.print("Invalid Input");
+        }
+
+
+    }
+    }
+
