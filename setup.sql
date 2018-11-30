@@ -62,6 +62,27 @@ CREATE TABLE send_transaction (
     PRIMARY KEY (STId),
     FOREIGN KEY (SSN) REFERENCES user_account(SSN)
 );
+
+/* request_transaction */
+CREATE TABLE request_transaction (
+    RTid INT NOT NULL AUTO_INCREMENT,
+    Amount INT NOT NULL,
+    ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    Memo VARCHAR(255),
+    SSN INT NOT NULL,
+    PRIMARY KEY(RTid),
+    FOREIGN KEY(SSN) REFERENCES user_account(SSN)
+);
+
+/* from */
+CREATE TABLE from_rq (
+    RTid INT NOT NULL,
+    Identifier VARCHAR(255) NOT NULL,
+    Percentage DECIMAL(36,2) NOT NULL,
+    PRIMARY KEY (RTid, Identifier),
+    FOREIGN KEY (RTid) REFERENCES request_transaction(RTid),
+    FOREIGN KEY (Identifier) REFERENCES electronic_address(Identifier)
+);
  
 /*** Setup our test data ***/
 
