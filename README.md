@@ -68,3 +68,6 @@ has not been claimed yet. This is to prevent users from ending up in the red.
 * Users are warned when sending money to an unknown identifier.
 * The percentage column is used to indicate what percentage of a total amount
 the payment is sending.
+* Realistically all report information can be derived from send_transaction.
+It tells you what people have send and received. request_transaction is just
+that, a request. It's a notification that someone would like money from you.

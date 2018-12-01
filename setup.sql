@@ -126,7 +126,10 @@ INSERT INTO electronic_address VALUES
 
 /* send_transaction */
 INSERT INTO send_transaction (Amount, ts, Memo, Cancelled, Claimed, SSN, Identifier) VALUES
-(5.00, '2018-11-29 00:00:00', 'For coffee', False, NULL, 000000001, 'cjd@ibm.com'),
-(5.25, '2018-11-23 00:00:00', 'Donuts', False, NULL, 000000001, '1-514-220-8686'),
-(5.25, '2018-10-04 00:00:00', 'Soda', False, NULL, 000000001, 'sql4lyfe@aol.com'),
-(4.25, '2018-10-02 00:00:00', 'Splitting check', False, NULL, 000000001, 'greg@commerze.com');
+(5.00,  '2018-11-29 00:00:00', 'For coffee', False, NULL, 000000001, 'cjd@ibm.com'),
+(5.25,  '2018-11-23 00:00:00', 'Donuts', False, NULL, 000000001, '1-514-220-8686'),
+(5.25,  '2018-10-04 00:00:00', 'Soda', False, NULL, 000000001, 'sql4lyfe@aol.com'),
+(4.25,  '2018-10-02 00:00:00', 'Splitting check', False, NULL, 000000001, 'greg@commerze.com'),
+(14.25, '2018-06-02 00:00:00', 'Office Gift', False, NULL, 000000001, 'greg@commerze.com'),
+(12.95, '2018-09-16 00:00:00', 'New Socks', False, '2018-09-16 12:00:00', 000000002, 'efc@ibm.com'),
+(6.05,  '2018-10-01 00:00:00', 'Pizza', False, '2018-10-01 12:00:00', 000000002, 'teddy@gmail.com');
