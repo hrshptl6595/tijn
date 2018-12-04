@@ -71,3 +71,6 @@ the payment is sending.
 * Realistically all report information can be derived from send_transaction.
 It tells you what people have send and received. request_transaction is just
 that, a request. It's a notification that someone would like money from you.
+* An account search only lets you search for the Name of someone's account by
+one of their electronic_address identifiers. No wildcards are supported and no
+information other than the name is given. This is for privacy reasons.
