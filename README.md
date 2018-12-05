@@ -45,7 +45,11 @@ $ java -cp .:/home/ryan/cs631/tijn/mysql-connector-java-8.0.13.jar tijn
 
 Windows:
 
-$ java -cp '.;C:\Users\rtolboom\tijn\mysql-connector-java-8.0.13.jar' tijn
+$ run_mariadb.bat
+
+or
+
+$ run_mysql.bat
 ```
 
 ## Usage
