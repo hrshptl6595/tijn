@@ -17,6 +17,19 @@ class TIJN_Statement {
     void menu() throws SQLException {
         ResultSet rset;
         Statement stmt = conn.createStatement();
+        String start, end;
+
+        rset = stmt.executeQuery(String.format(
+            "SELECT DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR), CURRENT_DATE"));
+        rset.next();
+        start = rset.getString(1);
+        end = rset.getString(2);
+        menu(start, end);
+    }
+        
+    void menu(String start, String end) throws SQLException {
+        ResultSet rset;
+        Statement stmt = conn.createStatement();
 
         //Union non-cancelled send_transactions we created with claimed
         //send_transactions to any of our identifiers for the last year.
@@ -36,9 +49,10 @@ class TIJN_Statement {
             "       (SELECT Identifier FROM electronic_address WHERE SSN=%1$d) AND" +
             "       Claimed IS NOT NULL" +
             ") AS T " +
-            "WHERE ts > DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) " +
-            "GROUP BY YEAR(ts), MONTH(ts)", ssn));
-        System.out.println("\n=== Summary of Last Year's Transactions ===");
+            "WHERE ts >='%2$s' AND ts<'%3$s' " +
+            "GROUP BY YEAR(ts), MONTH(ts)", ssn, start, end));
+        System.out.printf("\n=== Summary of Transactions from %s to %s ===\n",
+            start, end);
         while (rset.next()) {
             System.out.printf("Year-Month: %d-%02d Sent: $%-10s Recieved: $%-10s\n", rset.getInt(1),
                 rset.getInt(2), rset.getBigDecimal(3).toString(),

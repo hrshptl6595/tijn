@@ -83,7 +83,7 @@ class tijn {
                 account = new Account(scanner, conn, ssn);
                 transaction = new Transaction(scanner, conn, ssn);
                 statement = new TIJN_Statement(scanner, conn, ssn);
-		        search = new Search(scanner, conn, ssn);
+		        search = new Search(scanner, conn, ssn, statement);
                 main_menu();
             }
         } catch (SQLException ex) {

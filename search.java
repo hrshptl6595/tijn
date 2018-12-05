@@ -7,11 +7,13 @@ class Search {
     private Scanner scan;
     private Connection conn;
     private int ssn;
+    private TIJN_Statement statement;
 
-    Search(Scanner scan, Connection conn, int ssn) throws SQLException {
+    Search(Scanner scan, Connection conn, int ssn, TIJN_Statement statement) throws SQLException {
         this.scan = scan;
         this.conn = conn;
         this.ssn = ssn;
+        this.statement = statement;
     }
 
     void print_transactions(ResultSet rset) throws SQLException {
@@ -50,7 +52,7 @@ class Search {
     void menu() throws SQLException {
         ResultSet rset;
         Statement stmt = conn.createStatement();
-        String memo="", identifier="", input, search; 
+        String memo="", identifier="", input, search, start, end; 
 
         System.out.println("\n === Search ===");
         System.out.println("[A]ccount");	
@@ -119,7 +121,11 @@ class Search {
                 print_requests(rset);
                 return;
             case "D":
-                System.out.println("Not yet implemented.");
+                System.out.print("Start Date/Time (YYYY-MM-DD MM:HH:SS)\n> ");
+                start = scan.nextLine();
+                System.out.print("End Date/Time (YYYY-MM-DD MM:HH:SS)\n> ");
+                end = scan.nextLine();
+                statement.menu(start, end);
                 return;
             default:
                 System.out.println("Invalid selection");
