@@ -56,7 +56,7 @@ CREATE TABLE send_transaction (
     ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Memo VARCHAR(255),
     Cancelled BOOLEAN NOT NULL,
-    Claimed TIMESTAMP,
+    Claimed DATETIME,
     SSN int NOT NULL,
     Identifier varchar(255) NOT NULL,
     PRIMARY KEY (STId),
@@ -66,7 +66,7 @@ CREATE TABLE send_transaction (
 /* request_transaction */
 CREATE TABLE request_transaction (
     RTid INT NOT NULL AUTO_INCREMENT,
-    Amount INT NOT NULL,
+    Amount DECIMAL(36,2) NOT NULL,
     ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     Memo VARCHAR(255),
     SSN INT NOT NULL,
@@ -78,7 +78,7 @@ CREATE TABLE request_transaction (
 CREATE TABLE from_rq (
     RTid INT NOT NULL,
     Identifier VARCHAR(255) NOT NULL,
-    Percentage DECIMAL(36,2) NOT NULL,
+    Percentage INT NOT NULL,
     PRIMARY KEY (RTid, Identifier),
     FOREIGN KEY (RTid) REFERENCES request_transaction(RTid),
     FOREIGN KEY (Identifier) REFERENCES electronic_address(Identifier)
@@ -133,3 +133,15 @@ INSERT INTO send_transaction (Amount, ts, Memo, Cancelled, Claimed, SSN, Identif
 (14.25, '2018-06-02 00:00:00', 'Office Gift', False, NULL, 000000001, 'greg@commerze.com'),
 (12.95, '2018-09-16 00:00:00', 'New Socks', False, '2018-09-16 12:00:00', 000000002, 'efc@ibm.com'),
 (6.05,  '2018-10-01 00:00:00', 'Pizza', False, '2018-10-01 12:00:00', 000000002, 'teddy@gmail.com');
+
+SET FOREIGN_KEY_CHECKS=0;
+
+/* request_transaction */
+INSERT INTO request_transaction (Amount, ts, Memo, SSN) VALUES
+(2335.00, '2018-11-30 00:05:00', 'Rent', 000000002);
+
+/* from_rq */
+INSERT INTO from_rq (RTid, Identifier, Percentage) VALUES
+(1, 'teddy@gmail.com', 100);
+ 
+SET FOREIGN_KEY_CHECKS=1;

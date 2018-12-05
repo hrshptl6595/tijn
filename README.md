@@ -68,9 +68,14 @@ has not been claimed yet. This is to prevent users from ending up in the red.
 * Users are warned when sending money to an unknown identifier.
 * The percentage column is used to indicate what percentage of a total amount
 the payment is sending.
-* Realistically all report information can be derived from send_transaction.
-It tells you what people have send and received. request_transaction is just
+* Realistically all report information can be derived from *send_transaction*.
+It tells you what people have send and received. *request_transaction* is just
 that, a request. It's a notification that someone would like money from you.
-* An account search only lets you search for the Name of someone's account by
-one of their electronic_address identifiers. No wildcards are supported and no
+* An account search only lets you search for the *Name* of someone's account by
+one of their *electronic_address* *Identifiers*. No wildcards are supported and no
 information other than the name is given. This is for privacy reasons.
+* A transaction search will search the *Memo* and *Identifier* fields for
+any transactions sent FROM you. It will also search the *Memo*, *Name*, and
+*Identifier* fields (of the sender) for any transactions sent TO you. Lastly it
+will search the *Memo* and sender *Name* for any transaction requests made of
+you.

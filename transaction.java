@@ -80,7 +80,7 @@ class Transaction {
             String id, memo;
             ResultSet rset;
             BigDecimal amount;
-            BigDecimal percentage;
+            Integer percentage;
             System.out.print("Enter email address or phone:\n>");
             id = scan.nextLine();
             // warn if we can't lookup the identifier
@@ -90,12 +90,12 @@ class Transaction {
             if (! rset.next()) {
                 System.out.println(
                     "Unable to look up this email address or phone number. Please try again");
+                return;
             }
             System.out.print("Enter amount:\n>");
             amount = new BigDecimal(scan.nextLine());
-            System.out.print("Enter percentage to request from the provided user in decimal form:\n>");
-            percentage = new BigDecimal(scan.nextLine());
-
+            System.out.print("Enter percentage to request from the provided user:\n>");
+            percentage = Integer.parseInt(scan.nextLine());
         }
         catch (RuntimeException r){
             System.out.print("Invalid Input");
@@ -104,4 +104,3 @@ class Transaction {
 
     }
 }
-
