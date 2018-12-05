@@ -14,20 +14,19 @@ class Search {
         this.ssn = ssn;
     }
 
-    void print_transactions(ResultSet rset, Boolean show_ssn) throws SQLException {
-        String TFORMAT = "%03d %-8s %-21s %-20s %-10s %-21s %09d %-20s\n";
+    void print_transactions(ResultSet rset) throws SQLException {
+        String tformat = "%03d %-8s %-21s %-20s %-10s %-21s %-20s %-20s\n";
 
-        System.out.println(
-            "ID  Amount   Date/Time             Memo                 Cancelled  Claimed               SSN       Identifier"); 
+        System.out.println("ID  Amount   Date/Time             Memo                 Cancelled  Claimed               Name                 Identifier");
         while (rset.next()) {
-            System.out.printf(TFORMAT,
+            System.out.printf(tformat,
                 rset.getInt("STid"),
                 NumberFormat.getCurrencyInstance().format(rset.getBigDecimal("Amount")),
                 rset.getTimestamp("ts"),
                 rset.getString("Memo"),
                 rset.getBoolean("Cancelled") ? "True" : "False",
                 rset.getTimestamp("Claimed"),
-                show_ssn ? rset.getInt("SSN") : 0,
+                rset.getString("Name"),
                 rset.getString("Identifier"));
         }
     }
@@ -35,12 +34,12 @@ class Search {
     void menu() throws SQLException {
         ResultSet rset;
         Statement stmt = conn.createStatement();
-        String input, search;
+        String memo="", identifier="", input, search; 
 
         System.out.println("\n === Search ===");
         System.out.println("[A]ccount");	
         System.out.println("[T]ransaction");
-        System.out.println("[B]etween two Dates");
+        System.out.println("[D]ate Range");
         input = scan.nextLine().toUpperCase();
         switch(input) {
             case "A":
@@ -58,24 +57,36 @@ class Search {
                     System.out.println("Unable to lookup identifier");
                 return;
             case "T":
-                System.out.print("Search by [I]dentifier (email or phone) or [M]emo?\n> ");
-                input = scan.nextLine().toUpperCase();
-                if (input.equals("I") | input.equals("M")) {
-                    System.out.print("Please enter a search string:\n> ");
-                    search = scan.nextLine();
-                    rset = stmt.executeQuery(String.format(
-                        "SELECT * " +
-                        "FROM send_transaction " +
-                        "WHERE %s LIKE '%%%s%%' AND SSN=%s",
-                        input.equals("I") ? "Identifier" : "Memo", search,
-                        ssn));
-                    System.out.println("Send transactions:");
-                    print_transactions(rset, false);
-                } else {
-                    System.out.println("Invalid selection");
-                }
+                System.out.print("Please enter a search string:\n> ");
+                input = scan.nextLine();
+                System.out.println("\n=== Sent transactions ===");
+                rset = stmt.executeQuery(String.format(
+                    "SELECT * " +
+                    "FROM send_transaction, electronic_address, user_account " +
+                    "WHERE send_transaction.Identifier=electronic_address.Identifier AND" +
+                    "   electronic_address.SSN=user_account.SSN AND" +
+                    "   send_transaction.SSN=%s AND" +
+                    "   (Memo LIKE '%%%2$s%%' OR" +
+                    "   send_transaction.Identifier LIKE '%%%2$s%%' OR" +
+                    "   Name LIKE '%%%2$s%%')", ssn, input)); 
+                print_transactions(rset);
+                System.out.println("\n=== Received transactions ===");
+                rset = stmt.executeQuery(String.format(
+                    "SELECT  * " +
+                    "FROM send_transaction, electronic_address, user_account " +
+                    "WHERE send_transaction.Identifier=electronic_address.Identifier AND" +
+                    "   send_transaction.SSN=user_account.SSN AND" +
+                    "   send_transaction.Identifier IN (" +
+                    "       SELECT Identifier" +
+                    "       FROM electronic_address" +
+                    "       WHERE SSN=%s) AND" +
+                    "   (Memo LIKE '%%%2$s%%' OR" +
+                    "   Name LIKE '%%%2$s%%')", ssn, input));
+                print_transactions(rset);
+                System.out.println("\n=== Transaction Requests ===");
+                System.out.println("Not yet implemented");
                 return;
-            case "B":
+            case "D":
                 System.out.println("Not yet implemented.");
                 return;
             default:

@@ -74,7 +74,3 @@ that, a request. It's a notification that someone would like money from you.
 * An account search only lets you search for the Name of someone's account by
 one of their electronic_address identifiers. No wildcards are supported and no
 information other than the name is given. This is for privacy reasons.
-* A transaction search shows all transactions you sent or transactions you
-received based on a fuzzy match of either an Identifier or a Memo. SSNs that
-are not your own will be censored.
-
