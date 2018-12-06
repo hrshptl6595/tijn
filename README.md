@@ -83,5 +83,5 @@ any transactions sent FROM you. It will also search the *Memo*, *Name*, and
 *Identifier* fields (of the sender) for any transactions sent TO you. Lastly it
 will search the *Memo* and sender *Name* for any transaction requests made of
 you.
-* *Paid* and *Cancelled* were added to *from_rq* to keep track of whether
-people paid or denied a request.
+* *Paid* and was added to *from_rq* to keep track of whether people paid or denied
+a request.
