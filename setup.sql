@@ -79,6 +79,7 @@ CREATE TABLE from_rq (
     RTid INT NOT NULL,
     Identifier VARCHAR(255) NOT NULL,
     Percentage INT NOT NULL,
+    Paid BOOLEAN DEFAULT NULL, 
     PRIMARY KEY (RTid, Identifier),
     FOREIGN KEY (RTid) REFERENCES request_transaction(RTid),
     FOREIGN KEY (Identifier) REFERENCES electronic_address(Identifier)
@@ -132,16 +133,21 @@ INSERT INTO send_transaction (Amount, ts, Memo, Cancelled, Claimed, SSN, Identif
 (4.25,  '2018-10-02 00:00:00', 'Splitting check', False, NULL, 000000001, 'greg@commerze.com'),
 (14.25, '2018-06-02 00:00:00', 'Office Gift', False, NULL, 000000001, 'greg@commerze.com'),
 (12.95, '2018-09-16 00:00:00', 'New Socks', False, '2018-09-16 12:00:00', 000000002, 'efc@ibm.com'),
-(6.05,  '2018-10-01 00:00:00', 'Pizza', False, '2018-10-01 12:00:00', 000000002, 'teddy@gmail.com');
+(6.05,  '2018-10-01 00:00:00', 'Pizza', False, '2018-10-01 12:00:00', 000000002, 'teddy@gmail.com'),
+(99.12, '2018-03-01 00:20:00', 'Gambling debt', False, NULL, 000000002, 'efc@ibm.com'),
+(26.15, '2018-12-05 00:00:00', 'Broken window', False, NULL, 000000002, 'teddy@gmail.com');
 
 SET FOREIGN_KEY_CHECKS=0;
 
 /* request_transaction */
 INSERT INTO request_transaction (Amount, ts, Memo, SSN) VALUES
-(2335.00, '2018-11-30 00:05:00', 'Rent', 000000002);
+(2335.00, '2018-11-30 00:05:00', 'Rent', 000000002),
+(20.50, '2018-09-08 00:12:00', 'Lunch', 000000002);
 
 /* from_rq */
 INSERT INTO from_rq (RTid, Identifier, Percentage) VALUES
-(1, 'teddy@gmail.com', 100);
+(1, 'teddy@gmail.com', 100),
+(2, 'efc@ibm.com', 50),
+(2, '1-215-664-4040', 50);
  
 SET FOREIGN_KEY_CHECKS=1;

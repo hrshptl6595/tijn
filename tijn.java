@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.sql.*;
 import java.text.NumberFormat;
+import java.math.*;
 
 class tijn {
     static Scanner scanner = new Scanner(System.in);
@@ -38,17 +39,23 @@ class tijn {
 
     // Text interface for the main menu
     static void main_menu() throws SQLException {
-        String input;
+        String input, request, memo, identifier;
+        Statement stmt;
+        BigDecimal amount;
+        int rtid;
         
         while (true) {
+
             System.out.println("\n=== Main Menu ===");
             System.out.println("[A]ccount");
             System.out.println("[S]end Money");
             System.out.println("[R]equest Money");
             System.out.println("S[t]atements");
             System.out.println("S[e]arch Transactions");
+            System.out.println("[V]iew Requests");
             System.out.println("S[i]gn Out");
             System.out.print("> ");
+
             input = scanner.nextLine();
             switch(input.toUpperCase()) {
                 case "A":
@@ -65,6 +72,9 @@ class tijn {
                     break;
                 case "E":
 		            search.menu();
+                    break;
+                case "V":
+                    transaction.view_requests_menu();
                     break;
                 case "I":
                     return;
