@@ -56,12 +56,13 @@ class Transaction {
             "       FROM electronic_address" +
             "       WHERE SSN=%d)", ssn));
         while(rset.next()) {
+            Statement stmt2 = conn.createStatement();
             amount = rset.getBigDecimal("Amount");
             stid = rset.getInt("STid");
             System.out.printf("Collecting %s from %s for %s.\n",
                 currency(amount), rset.getString("Name"),
                 rset.getString("Memo"));
-            stmt.executeUpdate(String.format(
+            stmt2.executeUpdate(String.format(
                 "UPDATE send_transaction " +
                 "SET Claimed=CURRENT_TIMESTAMP " +
                 "WHERE STid=%s", stid)); 
@@ -204,12 +205,38 @@ class Transaction {
             System.out.print("Enter amount:\n>");
             amount = new BigDecimal(scan.nextLine());
             System.out.print("Enter percentage to request from the provided user:\n>");
-            percentage = Integer.parseInt(scan.nextLine());
+            percentage = new Integer(scan.nextLine());
+            System.out.print("Do you wish to include a memo: (Y/N) \n>");
+            if(scan.nextLine().toUpperCase().equals("Y")){
+                System.out.print("Please enter your memo: \n>");
+                memo = new String(scan.nextLine());
+            }
+            else
+                memo = null;
+            request_money(id, amount, percentage, memo);
+
         }
         catch (RuntimeException r){
             System.out.println(r.getMessage());
         }
 
+
+    }
+
+    void request_money(String id, BigDecimal amount, Integer percentage, String memo) throws SQLException{
+//cjd@ibm.com  
+        try{
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(String.format("INSERT INTO request_transaction"
+                + "(Amount, ts, Memo, SSN) VALUES"
+                + "(%s, CURRENT_TIMESTAMP, '%s', %s)", amount, memo, ssn));
+            stmt.executeUpdate(String.format("INSERT INTO from_rq"
+                + "(Identifier, Percentage, Paid) VALUES"
+                + "('%s', %s, %s)", id, percentage, "null"));
+        }
+        catch (RuntimeException r){
+            System.out.println(r.getMessage());
+        }
 
     }
 }

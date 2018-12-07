@@ -76,7 +76,7 @@ CREATE TABLE request_transaction (
 
 /* from */
 CREATE TABLE from_rq (
-    RTid INT NOT NULL,
+    RTid INT NOT NULL AUTO_INCREMENT,
     Identifier VARCHAR(255) NOT NULL,
     Percentage INT NOT NULL,
     Paid BOOLEAN DEFAULT NULL, 
